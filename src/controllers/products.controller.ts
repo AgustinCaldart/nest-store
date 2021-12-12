@@ -7,53 +7,35 @@ import {
   Put,
   Delete,
   Body,
-  Res,
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
+import { ProductsService } from 'src/services/products.service';
 
 @Controller('products')
 export class ProductsController {
+  constructor(private productsService: ProductsService) {}
+
   @Get()
   getProducts(@Query('limit') limit = 100, @Query('offset') offset = 0) {
-    return `limit ${limit} offset  ${offset}`;
+    return this.productsService.findAll();
   }
-  @Get(':id')
-  getProduct(@Param() params: any) {
-    return 'product' + params.id;
-  }
-  @Get(':id')
-  getProduct1(@Param('id') id: any) {
-    return 'product' + id;
+  @Get(':productId')
+  getOne(@Param('productId') productId: string) {
+    return this.productsService.findOne(+productId);
   }
   @Post()
   create(@Body() payload: any) {
-    return {
-      message: 'accion mensage',
-      payload,
-    };
+    return this.productsService.create(payload);
   }
-  @Post('/create')
-  creates(@Res() response: any, @Body() payload: any) {
-    response.status(HttpStatus.CREATED).json({
-      msg: 'Add a new product',
-      payload,
-    });
-  }
+
   @Put(':id')
-  update(@Res() response: any, @Param('id') id: number, @Body() payload: any) {
-    response.status(HttpStatus.OK).json({
-      msg: `modificado el ${id}`,
-      id,
-      payload,
-    });
+  update(@Param('id') id: string, @Body() payload: any) {
+    return this.productsService.update(+id, payload);
   }
   @Delete(':id')
   @HttpCode(HttpStatus.AMBIGUOUS)
-  delete(@Param('id') id: number) {
-    return {
-      msg: `eliminando el ${id}`,
-      id,
-    };
+  delete(@Param('id') id: string) {
+    return this.productsService.delete(+id);
   }
 }

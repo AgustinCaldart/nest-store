@@ -3,7 +3,7 @@ import { Product } from './../entities/entity';
 
 @Injectable()
 export class ProductsService {
-  private counterId = 0;
+  private counterId = 1;
   private products: Product[] = [
     {
       id: 1,
@@ -29,16 +29,19 @@ export class ProductsService {
     return newProduct;
   }
   update(id: number, changes: any) {
-    const index = this.products.findIndex((item) => item.id === id);
-    const product = this.products[index];
-    this.products[index] = {
-      ...product,
-      ...changes,
-    };
-    return this.products[index];
+    const product = this.findOne(id);
+    if (product) {
+      const index = this.products.findIndex((item) => item.id === id);
+      return (this.products[index] = {
+        ...product,
+        ...changes,
+      });
+    }
+    return null;
   }
   delete(id: number) {
     const index = this.products.findIndex((item) => item.id === id);
-    this.products.splice(index, 1);
+    const rta = this.products.splice(index, 1);
+    return rta;
   }
 }
