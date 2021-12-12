@@ -9,6 +9,7 @@ import {
   Body,
   Res,
   HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 
 @Controller('products')
@@ -34,7 +35,7 @@ export class ProductsController {
   }
   @Post('/create')
   creates(@Res() response: any, @Body() payload: any) {
-    response.status(HttpStatus.OK).json({
+    response.status(HttpStatus.CREATED).json({
       msg: 'Add a new product',
       payload,
     });
@@ -48,10 +49,11 @@ export class ProductsController {
     });
   }
   @Delete(':id')
-  delete(@Res() response: any, @Param('id') id: number) {
-    response.status(HttpStatus.OK).json({
+  @HttpCode(HttpStatus.AMBIGUOUS)
+  delete(@Param('id') id: number) {
+    return {
       msg: `eliminando el ${id}`,
       id,
-    });
+    };
   }
 }
