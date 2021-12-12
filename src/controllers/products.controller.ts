@@ -1,4 +1,13 @@
-import { Controller, Get, Query, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Param,
+  Post,
+  Body,
+  Res,
+  HttpStatus,
+} from '@nestjs/common';
 
 @Controller('products')
 export class ProductsController {
@@ -13,5 +22,19 @@ export class ProductsController {
   @Get(':id')
   getProduct1(@Param('id') id: any) {
     return 'product' + id;
+  }
+  @Post()
+  create(@Body() payload: any) {
+    return {
+      message: 'accion mensage',
+      payload,
+    };
+  }
+  @Post('/create')
+  creates(@Res() response: any, @Body() payload: any) {
+    response.status(HttpStatus.OK).json({
+      msg: 'Add a new product',
+      payload,
+    });
   }
 }
