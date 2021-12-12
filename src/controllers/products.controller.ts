@@ -4,6 +4,8 @@ import {
   Query,
   Param,
   Post,
+  Put,
+  Delete,
   Body,
   Res,
   HttpStatus,
@@ -35,6 +37,21 @@ export class ProductsController {
     response.status(HttpStatus.OK).json({
       msg: 'Add a new product',
       payload,
+    });
+  }
+  @Put(':id')
+  update(@Res() response: any, @Param('id') id: number, @Body() payload: any) {
+    response.status(HttpStatus.OK).json({
+      msg: `modificado el ${id}`,
+      id,
+      payload,
+    });
+  }
+  @Delete(':id')
+  delete(@Res() response: any, @Param('id') id: number) {
+    response.status(HttpStatus.OK).json({
+      msg: `eliminando el ${id}`,
+      id,
     });
   }
 }
