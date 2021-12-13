@@ -5,7 +5,7 @@ import { ProductsController } from './controllers/products.controller';
 import { CategoriesController } from './controllers/categories.controller';
 import { OrdersController } from './controllers/orders.controller';
 import { UsersController } from './controllers/users.controller';
-import { BrandsController } from './customers/brands.controller';
+//import { BrandsController } from './customers/brands.controller';
 import { ProductsService } from './services/products.service';
 
 @Module({
@@ -16,7 +16,7 @@ import { ProductsService } from './services/products.service';
     CategoriesController,
     OrdersController,
     UsersController,
-    BrandsController,
+    //BrandsController,
   ],
   providers: [AppService, ProductsService],
 })
