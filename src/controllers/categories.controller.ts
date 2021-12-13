@@ -1,9 +1,45 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Delete,
+  Body,
+  HttpStatus,
+  HttpCode,
+  ParseIntPipe,
+} from '@nestjs/common';
+import { CreateCategoryDto, UpdateCategoryDto } from 'src/dtos/categories.dtos';
+import { CategoriesService } from 'src/services/categories.service';
 
 @Controller('categories')
 export class CategoriesController {
-  @Get(':id/products/:productId')
-  getCategory(@Param('id') id: any, @Param('productId') productId: any) {
-    return `category: ${id} product: ${productId} `;
+  constructor(private categoriesService: CategoriesService) {}
+
+  @Get()
+  getProducts() {
+    return this.categoriesService.findAll();
+  }
+  @Get(':productId')
+  getOne(@Param('productId', ParseIntPipe) productId: number) {
+    return this.categoriesService.findOne(productId);
+  }
+  @Post()
+  create(@Body() payload: CreateCategoryDto) {
+    return this.categoriesService.create(payload);
+  }
+
+  @Put(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateCategoryDto,
+  ) {
+    return this.categoriesService.update(id, payload);
+  }
+  @Delete(':id')
+  @HttpCode(HttpStatus.AMBIGUOUS)
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.delete(id);
   }
 }
