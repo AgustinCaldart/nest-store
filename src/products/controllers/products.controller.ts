@@ -14,7 +14,7 @@ import {
 import {
   CreateProductDto,
   UpdateProductDto,
-} from 'src/products/dtos/products.dtos';
+} from 'src/products/dtos/products.dto';
 import { ProductsService } from 'src/products/services/products.service';
 
 @Controller('products')
