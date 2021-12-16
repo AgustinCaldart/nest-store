@@ -7,7 +7,6 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { enviroments } from './enviroments';
 import config from './config';
-import { MongoClient } from 'mongodb';
 
 import * as Joi from 'joi';
 
