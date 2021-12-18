@@ -6,7 +6,7 @@ export class Product extends Document {
   name: string;
   @Prop({ required: true })
   description: string;
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, index: true })
   price: number;
   @Prop({ type: Number })
   stock?: number;
@@ -23,3 +23,5 @@ export class Brand {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);
+//Se puede agregar {unique:true} para generar una llave unica entre dos campos
+ProductSchema.index({ price: 1, stock: -1 });
