@@ -1,53 +1,42 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customers.dto';
-import { Customers } from '../entities/entity.entity';
+import { Customer } from '../entities/customer.entity';
 
 @Injectable()
 export class CustomersService {
-  private counterId = 1;
-  private customers: Customers[] = [
-    {
-      id: 1,
-      name: 'product 1',
-    },
-  ];
-
-  findAll() {
-    return this.customers;
+  constructor(
+    @InjectModel(Customer.name) private customerModel: Model<Customer>,
+  ) {}
+  async findAll() {
+    return this.customerModel.find().exec();
   }
-  findOne(id: number) {
-    const data = this.customers.find((item) => item.id === id);
+  async findOne(id: string) {
+    const data = await this.customerModel.findById(id).exec();
     if (!data) {
       throw new NotFoundException(`data ${id} not found`);
     }
     return data;
   }
   create(payload: CreateCustomerDto) {
-    this.counterId++;
-    const newdata = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.customers.push(newdata);
-    return newdata;
+    const newdata = new this.customerModel(payload);
+    return newdata.save();
   }
-  update(id: number, changes: UpdateCustomerDto) {
-    const data = this.findOne(id);
-    if (data) {
-      const index = this.customers.findIndex((item) => item.id === id);
-      return (this.customers[index] = {
-        ...data,
-        ...changes,
-      });
+  async update(id: string, changes: UpdateCustomerDto) {
+    const data = await this.customerModel
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
+      .exec();
+    if (!data) {
+      throw new NotFoundException(`Data #${id} not found`);
     }
-    return null;
+    return data;
   }
-  delete(id: number) {
-    const index = this.customers.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`data ${id} not found`);
+  async delete(id: string) {
+    const data = this.customerModel.findByIdAndDelete(id);
+    if (!data) {
+      throw new NotFoundException(`Data #${id} not found`);
     }
-    const rta = this.customers.splice(index, 1);
-    return rta;
+    return data;
   }
 }
