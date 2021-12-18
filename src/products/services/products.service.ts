@@ -23,11 +23,12 @@ export class ProductsService {
       }
       return await this.productModel
         .find(filters)
+        .populate('brand') //populate nos ayuda a joinear la informacion referenciada
         .skip(offset)
         .limit(limit)
         .exec();
     }
-    return await this.productModel.find().exec();
+    return await this.productModel.find().populate('brand').exec();
   }
 
   async findOne(id: string) {

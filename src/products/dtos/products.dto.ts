@@ -9,6 +9,7 @@ import {
   Min,
   ValidateIf,
   ValidateNested,
+  IsMongoId,
 } from 'class-validator';
 import { CreateCategoryDto } from './categories.dto';
 
@@ -34,6 +35,10 @@ export class CreateProductDto {
   @ValidateNested()
   readonly category: CreateCategoryDto;
   */
+  //Referenciando brand
+  @IsMongoId()
+  @IsNotEmpty()
+  readonly brand: string;
 }
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
 
