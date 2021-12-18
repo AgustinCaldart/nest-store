@@ -1,48 +1,41 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brands.dto';
 import { Brand } from '../entities/brand.entity';
 
 @Injectable()
 export class BrandsService {
-  private counterId = 0;
-  private brands: Brand[];
+  constructor(@InjectModel(Brand.name) private brandModel: Model<Brand>) {}
 
-  findAll() {
-    return this.brands;
+  async findAll() {
+    return await this.brandModel.find().exec();
   }
-  findOne(id: number) {
-    const data = this.brands.find((item) => item.id === id);
+  async findOne(id: string) {
+    const data = await this.brandModel.findById(id).exec();
     if (!data) {
       throw new NotFoundException(`data ${id} not found`);
     }
     return data;
   }
-  create(payload: CreateBrandDto) {
-    this.counterId++;
-    const newdata = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.brands.push(newdata);
-    return newdata;
+  async create(payload: CreateBrandDto) {
+    const newData = new this.brandModel(payload);
+    return newData.save();
   }
-  update(id: number, changes: UpdateBrandDto) {
-    const data = this.findOne(id);
-    if (data) {
-      const index = this.brands.findIndex((item) => item.id === id);
-      return (this.brands[index] = {
-        ...data,
-        ...changes,
-      });
+  async update(id: string, changes: UpdateBrandDto) {
+    const data = await this.brandModel
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
+      .exec();
+    if (!data) {
+      throw new NotFoundException(`Data #${id} not found`);
     }
-    return null;
+    return data;
   }
-  delete(id: number) {
-    const index = this.brands.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`data ${id} not found`);
+  async delete(id: string) {
+    const data = await this.brandModel.findByIdAndDelete(id).exec();
+    if (!data) {
+      throw new NotFoundException(`Data #${id} not found`);
     }
-    const rta = this.brands.splice(index, 1);
-    return rta;
+    return data;
   }
 }
