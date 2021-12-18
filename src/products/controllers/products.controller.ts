@@ -15,6 +15,7 @@ import { MongoIdPipe } from 'src/common/mongo-id.pipe';
 import {
   CreateProductDto,
   UpdateProductDto,
+  FilterProductsDto,
 } from 'src/products/dtos/products.dto';
 import { ProductsService } from 'src/products/services/products.service';
 
@@ -25,8 +26,8 @@ export class ProductsController {
 
   @Get()
   @ApiOperation({ summary: 'Listamos los productos' })
-  getProducts(@Query('limit') limit = 100, @Query('offset') offset = 0) {
-    return this.productsService.findAll();
+  getProducts(@Query() params: FilterProductsDto) {
+    return this.productsService.findAll(params);
   }
   @Get(':productId')
   getOne(@Param('productId', MongoIdPipe) productId: string) {

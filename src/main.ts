@@ -9,6 +9,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true, //quita lo que no esta en paylaod
       forbidNonWhitelisted: true, //alerta en vez de ignorar
+      transformOptions: {
+        enableImplicitConversion: true, //Lo que viene por query params transforma implicita
+      },
     }),
   );
   const config = new DocumentBuilder()

@@ -5,6 +5,8 @@ import {
   IsUrl,
   IsNotEmpty,
   IsOptional,
+  IsPositive,
+  Min,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -25,3 +27,12 @@ export class CreateProductDto {
   readonly image?: string;
 }
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
+
+export class FilterProductsDto {
+  @IsOptional()
+  @IsPositive()
+  limit: number;
+  @IsOptional()
+  @Min(0)
+  offset: number;
+}
