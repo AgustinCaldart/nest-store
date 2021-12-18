@@ -9,7 +9,6 @@ import {
   Body,
   HttpStatus,
   HttpCode,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import {
@@ -32,23 +31,19 @@ export class ProductsController {
   getOne(@Param('productId') productId: string) {
     return this.productsService.findOne(productId);
   }
-  /*
+
   @Post()
   create(@Body() payload: CreateProductDto) {
     return this.productsService.create(payload);
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateProductDto,
-  ) {
+  update(@Param('id') id: string, @Body() payload: UpdateProductDto) {
     return this.productsService.update(id, payload);
   }
   @Delete(':id')
   @HttpCode(HttpStatus.AMBIGUOUS)
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id') id: string) {
     return this.productsService.delete(id);
   }
-  */
 }
