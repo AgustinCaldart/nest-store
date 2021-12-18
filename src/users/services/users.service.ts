@@ -51,12 +51,12 @@ export class UsersService {
     return rta;
   }
 
-  getOrderByUser(id: number): Order {
+  async getOrderByUser(id: number) {
     const user = this.findOne(id);
     return {
       data: new Date(),
       user,
-      products: this.productsService.findAll(),
+      products: await this.productsService.findAll(),
     };
   }
 }
