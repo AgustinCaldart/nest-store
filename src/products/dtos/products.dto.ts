@@ -8,7 +8,9 @@ import {
   IsPositive,
   Min,
   ValidateIf,
+  ValidateNested,
 } from 'class-validator';
+import { CreateCategoryDto } from './categories.dto';
 
 export class CreateProductDto {
   @IsString()
@@ -26,6 +28,12 @@ export class CreateProductDto {
   @IsUrl()
   @IsOptional()
   readonly image?: string;
+
+  /* RELACION EMBENIDA
+  @IsNotEmpty()
+  @ValidateNested()
+  readonly category: CreateCategoryDto;
+  */
 }
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
 

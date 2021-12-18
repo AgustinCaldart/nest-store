@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brands.dto';
-import { Brand } from '../entities/entity.entity';
+import { Brand } from '../entities/brand.entity';
 
 @Injectable()
 export class BrandsService {
